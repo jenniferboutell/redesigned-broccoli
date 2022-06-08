@@ -22,6 +22,14 @@
           <a class="nav-link {{ home_class }}" aria-current="page" href="/birthdays">Birthdays</a>
       </li>
       <li class="nav-item">
+      {% if active_page == 'register' %}
+         {% set register_class = "active" %}
+      {% elif current_user.is_authenticated %}
+         {% set register_class = "disabled" %}
+      {% endif %}
+        <a class="nav-link {{ 'active' if active_page =='login' }}" href="/register">Register</a>
+      </li>
+      <li class="nav-item">
       {% if active_page == 'login' %}
          {% set login_class = "active" %}
       {% elif current_user.is_authenticated %}

@@ -10,6 +10,7 @@ from models import db, login, UserModel
 class loginForm(FlaskForm):
     email=StringField(label="Enter email", validators=[DataRequired(),Email()])
     password=PasswordField(label="Enter password",validators=[DataRequired(), Length(min=6,max=16)])
+    username=StringField(label="Enter username",validators=[DataRequired(), Length(min=6,max=255)])
     submit=SubmitField(label="Login")
 
 class registerForm(FlaskForm):
@@ -93,11 +94,12 @@ def login():
         if request.method == "POST":
             email=request.form["email"]
             pw=request.form["password"]
+            username=request.form["username"]
             user = UserModel.query.filter_by(email = email).first()
             if user is not None and user.check_password(pw) :
                 login_user(user)
                 return redirect('/birthdays')
-    return render_template("login.html",form=form)
+    return render_template("register.html",form=form)
 
 @app.route("/register",methods=['GET','POST'])
 def register():
