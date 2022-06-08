@@ -1,4 +1,11 @@
 FROM python:3.10.4-slim-bullseye
-RUN pip3 install flask flask-wtf email_validator requests flask-login flask-sqlalchemy
-COPY app.py app.py
+
+WORKDIR /usr/src/flask-project
+
+COPY . .
+
+RUN pip3 install --upgrade pip
+
+RUN pip3 install -r requirements.txt
+
 CMD python app.py
