@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Moods{% endblock %}
+{% block content %}
+  <div>
+<div class="alert alert-success" role="alert">
+   <p class="text-uppercase font-weight-bold"> {{ title }}</p>
+ Choose the gif that best describes your mood
+    </div>
+     <table class="table">
+  <tbody>
+<tr>
+   <td>
+    {% for gif in gifs %}
+     <a href ="{{ gif }}"> <img src="{{ gif }}" class="float-left thumbnail" style="padding: 4px"></a>
+    {% endfor %}
+    </td>
+</tr>
+</tbody>
+</table>
+    </div>
+ {% endblock %}

@@ -1,3 +1,6 @@
+import json
+import urllib.request
+from urllib import parse
 from flask import Flask, render_template, request, redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField,SubmitField, DateField, IntegerField
@@ -64,28 +67,33 @@ def create_table():
     user = UserModel.query.filter_by(email = "jenniferaboutell@gmail.com").first()
     if user is None:
         addUser("jenniferaboutell@gmail.com","arugula","jboutell")    
-    
+
+def gif(mood):
+    gifs = []
+    url = "http://api.giphy.com/v1/gifs/search"
+
+    params = parse.urlencode({
+        "q": mood,
+        "api_key": "3m4gf6qKSc1vuLPwwPVyCGVk3K5su1nZ",
+        "limit": "20"
+  })
+
+    with urllib.request.urlopen("".join((url, "?", params))) as response:
+        data = json.loads(response.read())
+
+    for gif in data['data']:
+        gifs.append(gif['images']['fixed_height']['url'])
+
+    return gifs
 
 @app.route("/")
 def redirectToLogin():
     return redirect("/login")
 
-@app.route("/birthdays",methods=['GET','POST'])
+@app.route("/zones")
 @login_required
-def Birthdays():
-    form=BirthdayForm()
-    number = 0
-    if form.validate_on_submit():
-        if request.method == "POST":
-            date=request.form["date"]
-            print(date)
-            mdy = date.split("-")
-            month_day = mdy[1] +  "/" + mdy[2]
-            year = mdy[0]
-            number=request.form["number"]
-            data=findBirths(month_day,year,number)
-            return render_template("birthdays.html",form=form, number=int(number), sortedbyClosestYear=data)
-    return render_template("birthdays.html",form=form, number = 0)
+def Zones():
+    return render_template("zones.html")
 
 @app.route("/login",methods=['GET','POST'])
 def login():
@@ -98,7 +106,7 @@ def login():
             user = UserModel.query.filter_by(email = email).first()
             if user is not None and user.check_password(pw) :
                 login_user(user)
-                return redirect('/birthdays')
+                return redirect('/zones')
     return render_template("register.html",form=form)
 
 @app.route("/register",methods=['GET','POST'])
@@ -123,6 +131,115 @@ def register():
 def logout():
     logout_user()
     return redirect('/login')
+
+@app.route("/sad")
+def sad():
+  title = "Sad moods"
+  gifs = gif("sad")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/sick")
+def sick():
+  title = "Sick Moods"
+  gifs = gif("sick")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/tired")
+def tired():
+  title = "Tired Moods"
+  gifs = gif("tired")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/bored")
+def bored():
+  title = "Bored Moods"
+  gifs = gif("bored")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+
+@app.route("/happy")
+def happy():
+  title = "Happy moods"
+  gifs = gif("happy")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/calm")
+def calm():
+  title = "Calm Moods"
+  gifs = gif("Calm")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/focused")
+def focused():
+  title = "Focused Moods"
+  gifs = gif("focused")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/relaxed")
+def relaxed():
+  title = "Relaxed Moods"
+  gifs = gif("relaxed")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/frustrated")
+def frustrated():
+  title = "Frustrated Moods"
+  gifs = gif("frustrated")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/worried")
+def worried():
+  title = "Worried Moods"
+  gifs = gif("worried")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/silly")
+def silly():
+  title = "Silly Moods"
+  gifs = gif("silly")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/excited")
+def excited():
+  title = "Excited Moods"
+  gifs = gif("excited")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+
+@app.route("/angry")
+def angry():
+  title = "Angry moods"
+  gifs = gif("angry")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+
+@app.route("/terrified")
+def terrified():
+  title = "Terrified Moods"
+  gifs = gif("terrified")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/ecstatic")
+def ecstatic():
+  title = "Ecastatic Moods"
+  gifs = gif("ecstatic")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+@app.route("/devasted")
+def devasted():
+  title = "Devastated Moods"
+  gifs = gif("devastated")
+  return render_template('moods.html', title=title, gifs=gifs)
+
+
+
+
+@app.route("/allmoods")
+def allmoods():
+   title="Choose Your Mood"
+   return render_template('allmoods.html', title=title)
+
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)
