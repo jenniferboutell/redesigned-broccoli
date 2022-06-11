@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+    flask_app:
+        image: flask:test
+        restart: always
+        volumes:
+            - "/home/ubuntu/flask-project:/local"
+        ports:
+            - "80:5000"
+        command: python3 /local/app.py

@@ -1,0 +1,21 @@
+{% extends "base_student.html" %}
+{% set active_page = 'home' %}
+{% block title %} Home {% endblock %}
+{% block content %}
+
+  <div class = "container-fluid">
+    <h1>What is your mood today?</h1>
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col"> <a href="/sad">Sad</a></th>
+      <th scope="col"> <a href="/happy">Happy</a></th>
+      <th scope="col">  <a href="/anxious">Anxious</a></th>
+      <th scope="col">  <a href="/angry">Angry</a></th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+  </div>
+{% endblock %}
