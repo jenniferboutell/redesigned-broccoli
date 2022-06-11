@@ -1,5 +1,6 @@
 import json
 import urllib.request
+from datetime import datetime
 from urllib import parse
 from flask import Flask, render_template, request, redirect
 from flask_wtf import FlaskForm
@@ -8,7 +9,7 @@ from wtforms.validators import DataRequired, Length, EqualTo, Email
 from yelp import find_coffee
 from wiki import *
 from flask_login import current_user, login_user, login_required, logout_user
-from models import db, login, UserModel
+from models import db, login, UserModel, Gif_history
 
 class loginForm(FlaskForm):
     email=StringField(label="Enter email", validators=[DataRequired(),Email()])
@@ -20,7 +21,7 @@ class registerForm(FlaskForm):
     email=StringField(label="Enter email", validators=[DataRequired(),Email()])
     password=PasswordField(label="Enter password",validators=[DataRequired(), Length(min=6,max=16)])
     username=StringField(label="Enter usrname",validators=[DataRequired(), Length(min=6,max=255)])
-    submit=SubmitField(label="Login")
+    submit=SubmitField(label="Register")
 
 
 DBUSER = 'jboutell'
@@ -29,12 +30,14 @@ DBHOST = 'db'
 DBPORT = '5432'
 DBNAME = 'pglogindb'
 
+class moodForm(FlaskForm):
+    gif_url = StringField(validators=[Length(min=6, max=1000)])
+    
 
-
-class BirthdayForm(FlaskForm):
-    date=DateField(label="Enter Date", validators=[DataRequired()])
-    number=IntegerField(label="Enter max number of records",validators=[DataRequired()])
-    submit=SubmitField(label="Find Birthdays")
+#class BirthdayForm(FlaskForm):
+ #   date=DateField(label="Enter Date", validators=[DataRequired()])
+  #  number=IntegerField(label="Enter max number of records",validators=[DataRequired()])
+   # submit=SubmitField(label="Find Birthdays")
 
 #passwords={}
 #passwords['lhhung@uw.edu']='qwerty'
@@ -61,6 +64,14 @@ def addUser(email, password, username):
     db.session.add(user)
     db.session.commit()
 
+def addGif(gif_url, giftime, user_id):
+    gifchoice = Gif_history()
+    gifchoice.gif_url = gif_url
+    gifchoice.giftime = giftime
+    gifchoice.user_id = user_id
+    db.session.add(gifchoice)
+    db.session.commit()
+    
 @app.before_first_request
 def create_table():
     db.create_all()
@@ -86,6 +97,8 @@ def gif(mood):
 
     return gifs
 
+
+    
 @app.route("/")
 def redirectToLogin():
     return redirect("/login")
@@ -126,6 +139,21 @@ def register():
             addUser(email, pw, username)
             return redirect('/login')
     return render_template("register.html",form=form)
+
+@app.route("/mood", methods=["POST"])
+def getmood():
+    #form=moodForm()
+    #if form.validate_on_submit():
+    gif_url = request.form["gif_url"]
+    giftime = datetime.now()
+    user_id = current_user.id
+    addGif(gif_url,giftime,user_id)
+    return redirect('/moodhistory')
+
+@app.route("/moodhistory")
+def moodhistory():
+    title = "Your Mood History"
+    return render_template("moodhistory.html",user=current_user)
 
 @app.route('/logout')
 def logout():

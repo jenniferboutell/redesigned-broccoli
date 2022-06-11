@@ -11,7 +11,12 @@
 <tr>
    <td>
     {% for gif in gifs %}
-     <a href ="{{ gif }}"> <img src="{{ gif }}" class="float-left thumbnail" style="padding: 4px"></a>
+     <form method = "POST" action = "/mood">
+     <button type = "submit">
+         <input type = "hidden" value= "{{ gif }}" name = "gif_url"> 
+            <img src="{{ gif }}" class="float-left thumbnail" style="padding: 4px">
+     </button>
+     </form>
     {% endfor %}
     </td>
 </tr>
