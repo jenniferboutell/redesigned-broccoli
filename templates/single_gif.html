@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}My Mood{% endblock %}
+{% block content %}
+<div>
+<div class="alert alert-success" role="alert">
+<p class = "text-uppercase font-weight-bold"> {{ title }}</p>
+</div>
+    <table class="table">
+    <tbody>
+    <tr>
+     <td>
+    <img src="{{ gifchoice.gif_url }}" />
+    <p><a href="/moodhistory">Your Mood History</a></p> 
+    </td>
+    </tr>
+</div>
+<!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-62a3ef147187bbd9"></script>
+
+{% endblock %}

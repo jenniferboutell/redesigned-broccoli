@@ -11,10 +11,10 @@
 <tr>
    <td>
     {% for gif in gifs %}
-     <form method = "POST" action = "/mood">
+     <form method = "POST" action = "/mood" class="float-left" style="padding: 4px">
      <button type = "submit">
          <input type = "hidden" value= "{{ gif }}" name = "gif_url"> 
-            <img src="{{ gif }}" class="float-left thumbnail" style="padding: 4px">
+            <img src="{{ gif }}">
      </button>
      </form>
     {% endfor %}

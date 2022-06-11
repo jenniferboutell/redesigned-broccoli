@@ -2,7 +2,7 @@ import json
 import urllib.request
 from datetime import datetime
 from urllib import parse
-from flask import Flask, render_template, request, redirect
+from flask import Flask, flash, render_template, request, redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField,SubmitField, DateField, IntegerField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
@@ -120,7 +120,9 @@ def login():
             if user is not None and user.check_password(pw) :
                 login_user(user)
                 return redirect('/zones')
-    return render_template("register.html",form=form)
+            else: 
+                flash("Please register first")
+    return render_template("login.html",form=form)
 
 @app.route("/register",methods=['GET','POST'])
 def register():
@@ -149,6 +151,11 @@ def getmood():
     user_id = current_user.id
     addGif(gif_url,giftime,user_id)
     return redirect('/moodhistory')
+
+@app.route("/yourmood")
+def yourmood():
+    title = "Your Mood"
+    return render_template("single_gif.html", user=current_user)
 
 @app.route("/moodhistory")
 def moodhistory():

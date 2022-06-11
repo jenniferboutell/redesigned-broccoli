@@ -2,7 +2,20 @@
 {% set active_page = 'login' %}
 {% block title %} Login {% endblock %}
 {% block content %}
-<div class="w-50">
+<div>
+<div class="alert alert-success" role = "alert">
+   <p class="text-uppercase font-weight-bold">Login, or Click the Register Link if You Are a New User</p></div>
+   <p>Welcome to your online mood journal!</p>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
 <form method="post">
    {{ form.csrf_token }}
   <div class="mb-3">
